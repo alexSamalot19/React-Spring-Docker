@@ -20,4 +20,9 @@ public class StudentService {
         // To-do: Logic
         studentRepository.save(student);
     }
+
+    public void deleteStudent(Long studentId){
+        // To-do: Logic
+        studentRepository.deleteById(studentId);
+    }
 }

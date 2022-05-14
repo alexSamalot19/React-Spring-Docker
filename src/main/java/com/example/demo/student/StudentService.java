@@ -1,5 +1,7 @@
 package com.example.demo.student;
 
+import com.example.demo.student.exception.BadRequestException;
+import com.example.demo.student.exception.StudentNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +19,22 @@ public class StudentService {
     }
 
     public void addStudent(Student student){
-        // To-do: Logic
+        Boolean existsEmail = studentRepository
+                .selectExistsEmail(student.getEmail());
+        if(existsEmail) {
+            throw new BadRequestException(
+                    "The email " + student.getEmail() + "is already taken"
+            );
+        }
         studentRepository.save(student);
     }
 
     public void deleteStudent(Long studentId){
-        // To-do: Logic
+        if(!studentRepository.existsById(studentId)){
+            throw new StudentNotFoundException(
+                    "The requested Id: " + studentId + " does not exist"
+            );
+        }
         studentRepository.deleteById(studentId);
     }
 }
